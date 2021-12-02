@@ -4,11 +4,13 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import com.algaworks.algafood.client.api.exception.ClientApiException;
-import com.algaworks.algafood.client.model.RestauranteResumoModel;
+import com.algaworks.algafood.client.model.RestauranteModel;
+import com.algaworks.algafood.client.model.input.RestauranteInput;
 
 import lombok.AllArgsConstructor;
 
@@ -21,18 +23,31 @@ public class RestauranteClient {
 
 	private RestTemplate restTemplate;
 
-	public List<RestauranteResumoModel> listar() {
+	public List<RestauranteModel> listar() {
 
 		try {
 			URI resourceUri = URI.create(baseUrl + RESOURCE_PATH);
 
-			RestauranteResumoModel[] restaurantesArray = restTemplate.getForObject(resourceUri,
-					RestauranteResumoModel[].class);
+			RestauranteModel[] restaurantesArray = restTemplate.getForObject(resourceUri, RestauranteModel[].class);
 
 			return Arrays.asList(restaurantesArray);
 		} catch (RestClientResponseException e) {
 			throw new ClientApiException(e.getMessage(), e);
 		}
+	}
+
+	public RestauranteModel cadastrar(RestauranteInput restauranteInput) {
+
+		try {
+			URI resourceUri = URI.create(baseUrl + RESOURCE_PATH);
+			RestauranteModel restaurante = restTemplate.postForObject(resourceUri, restauranteInput,
+					RestauranteModel.class);
+
+			return restaurante;
+		} catch (HttpClientErrorException e) {
+			throw new ClientApiException(e.getMessage(), e);
+		}
+
 	}
 
 }

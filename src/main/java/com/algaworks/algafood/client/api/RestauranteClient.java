@@ -15,7 +15,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class RestauranteClient {
 
-	private static final String RESOURCE_PATH = "/restaurantesss";
+	private static final String RESOURCE_PATH = "/restaurantes";
 
 	private String baseUrl;
 

@@ -36,6 +36,20 @@ public class RestauranteClient {
 		}
 	}
 
+	public RestauranteModel buscarPorId(Long restauranteId) {
+		try {
+
+			URI resourceUri = URI.create(baseUrl + RESOURCE_PATH + "/" + restauranteId);
+
+			RestauranteModel restauranteModel = restTemplate.getForObject(resourceUri, RestauranteModel.class);
+
+			return restauranteModel;
+
+		} catch (HttpClientErrorException e) {
+			throw new ClientApiException(e.getMessage(), e);
+		}
+	}
+
 	public RestauranteModel cadastrar(RestauranteInput restauranteInput) {
 
 		try {
@@ -48,6 +62,18 @@ public class RestauranteClient {
 			throw new ClientApiException(e.getMessage(), e);
 		}
 
+	}
+
+	public void atualizar(Long idRestaurante, RestauranteInput restauranteInput) {
+
+		try {
+
+			URI resourceUri = URI.create(baseUrl + RESOURCE_PATH + "/" + idRestaurante);
+			restTemplate.put(resourceUri, restauranteInput);
+
+		} catch (HttpClientErrorException e) {
+			throw new ClientApiException(e.getMessage(), e);
+		}
 	}
 
 }
